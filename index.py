@@ -40,7 +40,7 @@ app.layout = html.Div([
             html.Div([
                 html.Img(src=app.get_asset_url('leakage.png'),
                          className='image'),
-                html.Div('Wifi Gas Leakage and Smoke Detector',
+                html.Div('IOT Gas Leakage and Smoke Detector',
                          style={'line-height': '15px'},
                          className='title_text')
             ], className='title_row')
