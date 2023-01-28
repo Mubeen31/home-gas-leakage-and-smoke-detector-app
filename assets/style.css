@@ -80,3 +80,19 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
+.sound_image_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 30px;
+  row-gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.alarm_button_column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
