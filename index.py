@@ -156,7 +156,7 @@ app.layout = html.Div([
                 ], className='drop_down_list_column')
             ], className='put_in_column')
 
-        ], className='temp_container twelve columns')
+        ], className='temp_container2 twelve columns')
     ], className='row'),
 
 ])
