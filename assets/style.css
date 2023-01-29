@@ -96,3 +96,9 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
+.drop_down_list_column {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}

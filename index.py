@@ -6,8 +6,6 @@ import dash_bootstrap_components as dbc
 from app import app
 from tabContents.tab_one import page_one_layout
 from tabContents.tab_two import page_two_layout
-from tabContents.tab_three import page_three_layout
-from tabContents.tab_four import page_four_layout
 
 server = app.server
 
@@ -54,18 +52,10 @@ app.layout = html.Div([
                         value='content_tab_one',
                         style=tab_style,
                         selected_style=selected_tab_style),
-                dcc.Tab(label='Setting',
+                dcc.Tab(label='Notifications',
                         value='content_tab_two',
                         style=tab_style,
                         selected_style=selected_tab_style),
-                dcc.Tab(label='Alert',
-                        value='content_tab_three',
-                        style=tab_style,
-                        selected_style=selected_tab_style),
-                dcc.Tab(label='Activate',
-                        value='content_tab_four',
-                        style=tab_style,
-                        selected_style=selected_tab_style)
             ], style={'display': 'flex', 'flex-direction': 'row'})
         ], className='tabs_container twelve columns')
     ], className='row'),
@@ -82,10 +72,6 @@ def render_content(value):
         return page_one_layout
     elif value == 'content_tab_two':
         return page_two_layout
-    elif value == 'content_tab_three':
-        return page_three_layout
-    elif value == 'content_tab_four':
-        return page_four_layout
 
 
 if __name__ == '__main__':
