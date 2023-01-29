@@ -8,10 +8,13 @@ import pyrebase
 from data import config
 from drop_down_list_values import temp_drop_down_list_values
 from drop_down_list_values import gas_smoke_drop_down_list_values
-from plyer import notification
+from push_bullet import api_key
+from pushbullet import Pushbullet
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
+
+p_b = Pushbullet(api_key)
 
 metaTags = [
     {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minium-scale=0.5'}]
@@ -147,7 +150,7 @@ app.layout = html.Div([
                                  clearable=True,
                                  disabled=False,
                                  style={'display': True, 'margin-top': '-5px'},
-                                 value=210,
+                                 value=230,
                                  placeholder='Select Value',
                                  options=gas_smoke_drop_down_list_values),
                 ], className='drop_down_list_column')
@@ -364,8 +367,8 @@ def update_value(n_intervals, push, value):
         temp = item.val()
 
     if temp >= value and push == True:
-        temp_noti = notification.notify(title='Warning!',
-                                        message='Kitchen Temperature is increased.')
+        temp_noti = p_b.push_note(title='Warning!',
+                                  body='Kitchen Temperature is increased.')
         return [
             html.Div(temp_noti),
         ]
@@ -400,8 +403,8 @@ def update_value(n_intervals, push, value):
         gas = item.val()
 
     if gas >= value and push == True:
-        gas_noti = notification.notify(title='Warning!',
-                                       message='Gases or smoke level is increased in kitchen.')
+        gas_noti = p_b.push_note(title='Warning!',
+                                 body='Gases or smoke level is increased in kitchen.')
         return [
             html.Div(gas_noti),
         ]
