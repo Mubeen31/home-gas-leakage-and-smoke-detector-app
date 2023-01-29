@@ -141,7 +141,7 @@ app.layout = html.Div([
                 ], className='notifications_row'),
 
                 html.Div([
-                    html.P('Select notification value for Temperature', style={'color': '#666666'}),
+                    html.P('Select notification value for gases and smoke', style={'color': '#666666'}),
                     dcc.Dropdown(id='select_temp_value2',
                                  multi=False,
                                  clearable=True,
@@ -401,7 +401,7 @@ def update_value(n_intervals, push, value):
 
     if gas >= value and push == True:
         gas_noti = notification.notify(title='Warning!',
-                                       message='Gases or smoke is increased in kitchen.')
+                                       message='Gases or smoke level is increased in kitchen.')
         return [
             html.Div(gas_noti),
         ]
