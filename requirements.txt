@@ -55,3 +55,4 @@ Werkzeug==2.2.2
 gunicorn==20.1.0
 dash-daq==0.5.0
 Pyrebase4==4.6.0
+plyer==2.1.0
