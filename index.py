@@ -1,20 +1,21 @@
 import dash
 from dash import html
 from dash import dcc
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 import dash_bootstrap_components as dbc
 import dash_daq as daq
 import pyrebase
 from data import config
 from drop_down_list_values import temp_drop_down_list_values
 from drop_down_list_values import gas_smoke_drop_down_list_values
-from push_bullet import api_key
-from pushbullet import Pushbullet
+
+# from push_bullet import api_key
+# from pushbullet import Pushbullet
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
-p_b = Pushbullet(api_key)
+# p_b = Pushbullet(api_key)
 
 metaTags = [
     {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minium-scale=0.5'}]
@@ -54,14 +55,10 @@ app.layout = html.Div([
                                       ),
                     html.Div([
                         html.P('Select value for alarm', style={'color': '#666666'}),
-                        dcc.Dropdown(id='select_temp_value',
-                                     multi=False,
-                                     clearable=True,
-                                     disabled=False,
-                                     style={'display': True, 'margin-top': '-5px'},
-                                     value=22,
-                                     placeholder='Select Value',
-                                     options=temp_drop_down_list_values),
+                        dcc.Input(id='input_value_here',
+                                  type='number',
+                                  value=22,
+                                  style={'margin-top': '-10px'}),
                     ], className='drop_down_list_column')
                 ], className='alarm_button_column')
             ], className='sound_image_row'),
@@ -101,68 +98,69 @@ app.layout = html.Div([
         ], className='temp_container twelve columns')
     ], className='row'),
 
-    html.Div([
-        html.Div([
-            html.Div(id='temp_value1'),
-
-            html.Div([
-                html.Div([
-                    html.Div(id='title'),
-                    daq.BooleanSwitch(id='notifications',
-                                      on=True,
-                                      color="#9B51E0",
-                                      ),
-                ], className='notifications_row'),
-
-                html.Div([
-                    html.P('Select notification value for Temperature', style={'color': '#666666'}),
-                    dcc.Dropdown(id='select_temp_value1',
-                                 multi=False,
-                                 clearable=True,
-                                 disabled=False,
-                                 style={'display': True, 'margin-top': '-5px'},
-                                 value=22,
-                                 placeholder='Select Value',
-                                 options=temp_drop_down_list_values),
-                ], className='drop_down_list_column')
-            ], className='put_in_column')
-
-        ], className='temp_container1 twelve columns')
-    ], className='row'),
-
-    html.Div([
-        html.Div([
-            html.Div(id='gas_smoke_value1'),
-
-            html.Div([
-                html.Div([
-                    html.Div(id='title1'),
-                    daq.BooleanSwitch(id='notifications1',
-                                      on=True,
-                                      color="#9B51E0",
-                                      ),
-                ], className='notifications_row'),
-
-                html.Div([
-                    html.P('Select notification value for gases and smoke', style={'color': '#666666'}),
-                    dcc.Dropdown(id='select_temp_value2',
-                                 multi=False,
-                                 clearable=True,
-                                 disabled=False,
-                                 style={'display': True, 'margin-top': '-5px'},
-                                 value=230,
-                                 placeholder='Select Value',
-                                 options=gas_smoke_drop_down_list_values),
-                ], className='drop_down_list_column')
-            ], className='put_in_column')
-
-        ], className='temp_container2 twelve columns')
-    ], className='row'),
+    # html.Div([
+    #     html.Div([
+    #         html.Div(id='temp_value1'),
+    #
+    #         html.Div([
+    #             html.Div([
+    #                 html.Div(id='title'),
+    #                 daq.BooleanSwitch(id='notifications',
+    #                                   on=True,
+    #                                   color="#9B51E0",
+    #                                   ),
+    #             ], className='notifications_row'),
+    #
+    #             html.Div([
+    #                 html.P('Select notification value for Temperature', style={'color': '#666666'}),
+    #                 dcc.Dropdown(id='select_temp_value1',
+    #                              multi=False,
+    #                              clearable=True,
+    #                              disabled=False,
+    #                              style={'display': True, 'margin-top': '-5px'},
+    #                              value=22,
+    #                              placeholder='Select Value',
+    #                              options=temp_drop_down_list_values),
+    #             ], className='drop_down_list_column')
+    #         ], className='put_in_column')
+    #
+    #     ], className='temp_container1 twelve columns')
+    # ], className='row'),
+    #
+    # html.Div([
+    #     html.Div([
+    #         html.Div(id='gas_smoke_value1'),
+    #
+    #         html.Div([
+    #             html.Div([
+    #                 html.Div(id='title1'),
+    #                 daq.BooleanSwitch(id='notifications1',
+    #                                   on=True,
+    #                                   color="#9B51E0",
+    #                                   ),
+    #             ], className='notifications_row'),
+    #
+    #             html.Div([
+    #                 html.P('Select notification value for gases and smoke', style={'color': '#666666'}),
+    #                 dcc.Dropdown(id='select_temp_value2',
+    #                              multi=False,
+    #                              clearable=True,
+    #                              disabled=False,
+    #                              style={'display': True, 'margin-top': '-5px'},
+    #                              value=230,
+    #                              placeholder='Select Value',
+    #                              options=gas_smoke_drop_down_list_values),
+    #             ], className='drop_down_list_column')
+    #         ], className='put_in_column')
+    #
+    #     ], className='temp_container2 twelve columns')
+    # ], className='row'),
 
 ])
 
 
 @app.callback(Output('temp_value', 'children'),
+
               [Input('blink_image', 'n_intervals')])
 def update_value(n_intervals):
     temp_value = db.child('DHT').get('temperature')
@@ -188,13 +186,14 @@ def update_value(n_intervals):
 @app.callback(Output('alarm', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('alarm_button', 'on')],
-              [Input('select_temp_value', 'value')])
-def update_value(n_intervals, button, select_temp_value):
+              [State('input_value_here', 'value')]
+              )
+def update_value(n_intervals, button, input_value_here):
     temp_value = db.child('DHT').get('temperature')
     for item in temp_value.each():
         temp = item.val()
 
-    if temp >= select_temp_value and button == True:
+    if temp >= input_value_here and button == True:
         return [
             html.Audio(src=app.get_asset_url('alarm.mp3'),
                        autoPlay='AUTOPLAY',
@@ -203,51 +202,53 @@ def update_value(n_intervals, button, select_temp_value):
                        preload='yes',
                        style={'display': 'None'})
         ]
-    elif temp >= select_temp_value and button == False:
+    elif temp >= input_value_here and button == False:
         return None
-    elif temp < select_temp_value:
+    elif temp < input_value_here:
         return None
 
 
 @app.callback(Output('sound_image', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('alarm_button', 'on')],
-              [Input('select_temp_value', 'value')])
-def update_value(n_intervals, button, select_temp_value):
+              [State('input_value_here', 'value')],
+              )
+def update_value(n_intervals, button, input_value_here):
     temp_value = db.child('DHT').get('temperature')
     for item in temp_value.each():
         temp = item.val()
 
-    if temp >= select_temp_value and button == True:
+    if temp >= input_value_here and button == True:
         return [
             html.Img(src=app.get_asset_url('alarm.png'))
         ]
-    elif temp >= select_temp_value and button == False:
+    elif temp >= input_value_here and button == False:
         return None
-    elif temp < select_temp_value:
+    elif temp < input_value_here:
         return None
 
 
 @app.callback(Output('black_sound_image', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('alarm_button', 'on')],
-              [Input('select_temp_value', 'value')])
-def update_value(n_intervals, button, select_temp_value):
+              [State('input_value_here', 'value')],
+              )
+def update_value(n_intervals, button, input_value_here):
     temp_value = db.child('DHT').get('temperature')
     for item in temp_value.each():
         temp = item.val()
 
-    if temp >= select_temp_value and button == True:
+    if temp >= input_value_here and button == True:
         return None
-    elif temp >= select_temp_value and button == False:
+    elif temp >= input_value_here and button == False:
         return [
             html.Img(src=app.get_asset_url('bell.png'))
         ]
-    elif temp < select_temp_value and button == False:
+    elif temp < input_value_here and button == False:
         return [
             html.Img(src=app.get_asset_url('bell.png'))
         ]
-    elif temp < select_temp_value and button == True:
+    elif temp < input_value_here and button == True:
         return [
             html.Img(src=app.get_asset_url('bell.png'))
         ]
@@ -344,76 +345,76 @@ def update_value(n_intervals, button, select_gas_smoke_value):
         ]
 
 
-@app.callback(Output('title', 'children'),
-              [Input('notifications', 'on')])
-def update_value(push):
-    if push == True:
-        return [
-            html.Div('Notifications are enabled')
-        ]
-    elif push == False:
-        return [
-            html.Div('Notifications are disabled')
-        ]
-
-
-@app.callback(Output('temp_value1', 'children'),
-              [Input('blink_image', 'n_intervals')],
-              [Input('notifications', 'on')],
-              [Input('select_temp_value1', 'value')])
-def update_value(n_intervals, push, value):
-    temp_value = db.child('DHT').get('temperature')
-    for item in temp_value.each():
-        temp = item.val()
-
-    if temp >= value and push == True:
-        temp_noti = p_b.push_note(title='Warning!',
-                                  body='Kitchen Temperature is increased.')
-        return [
-            html.Div(temp_noti),
-        ]
-    elif temp >= value and push == False:
-        return None
-    elif temp < value and push == True:
-        return None
-    elif temp < value and push == False:
-        return None
-
-
-@app.callback(Output('title1', 'children'),
-              [Input('notifications1', 'on')])
-def update_value(push):
-    if push == True:
-        return [
-            html.Div('Notifications are enabled')
-        ]
-    elif push == False:
-        return [
-            html.Div('Notifications are disabled')
-        ]
-
-
-@app.callback(Output('gas_smoke_value1', 'children'),
-              [Input('blink_image', 'n_intervals')],
-              [Input('notifications1', 'on')],
-              [Input('select_temp_value2', 'value')])
-def update_value(n_intervals, push, value):
-    gas_value = db.child('MQ135').get('gas')
-    for item in gas_value.each():
-        gas = item.val()
-
-    if gas >= value and push == True:
-        gas_noti = p_b.push_note(title='Warning!',
-                                 body='Gases or smoke level is increased in kitchen.')
-        return [
-            html.Div(gas_noti),
-        ]
-    elif gas >= value and push == False:
-        return None
-    elif gas < value and push == True:
-        return None
-    elif gas < value and push == False:
-        return None
+# @app.callback(Output('title', 'children'),
+#               [Input('notifications', 'on')])
+# def update_value(push):
+#     if push == True:
+#         return [
+#             html.Div('Notifications are enabled')
+#         ]
+#     elif push == False:
+#         return [
+#             html.Div('Notifications are disabled')
+#         ]
+#
+#
+# @app.callback(Output('temp_value1', 'children'),
+#               [Input('blink_image', 'n_intervals')],
+#               [Input('notifications', 'on')],
+#               [Input('select_temp_value1', 'value')])
+# def update_value(n_intervals, push, value):
+#     temp_value = db.child('DHT').get('temperature')
+#     for item in temp_value.each():
+#         temp = item.val()
+#
+#     if temp >= value and push == True:
+#         temp_noti = p_b.push_note(title='Warning!',
+#                                   body='Kitchen Temperature is increased.')
+#         return [
+#             html.Div(temp_noti),
+#         ]
+#     elif temp >= value and push == False:
+#         return None
+#     elif temp < value and push == True:
+#         return None
+#     elif temp < value and push == False:
+#         return None
+#
+#
+# @app.callback(Output('title1', 'children'),
+#               [Input('notifications1', 'on')])
+# def update_value(push):
+#     if push == True:
+#         return [
+#             html.Div('Notifications are enabled')
+#         ]
+#     elif push == False:
+#         return [
+#             html.Div('Notifications are disabled')
+#         ]
+#
+#
+# @app.callback(Output('gas_smoke_value1', 'children'),
+#               [Input('blink_image', 'n_intervals')],
+#               [Input('notifications1', 'on')],
+#               [Input('select_temp_value2', 'value')])
+# def update_value(n_intervals, push, value):
+#     gas_value = db.child('MQ135').get('gas')
+#     for item in gas_value.each():
+#         gas = item.val()
+#
+#     if gas >= value and push == True:
+#         gas_noti = p_b.push_note(title='Warning!',
+#                                  body='Gases or smoke level is increased in kitchen.')
+#         return [
+#             html.Div(gas_noti),
+#         ]
+#     elif gas >= value and push == False:
+#         return None
+#     elif gas < value and push == True:
+#         return None
+#     elif gas < value and push == False:
+#         return None
 
 
 if __name__ == '__main__':

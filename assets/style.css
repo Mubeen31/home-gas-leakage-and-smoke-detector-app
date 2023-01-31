@@ -138,3 +138,9 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.input_button_row {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+}
