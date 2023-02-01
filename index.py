@@ -82,14 +82,10 @@ app.layout = html.Div([
                                       ),
                     html.Div([
                         html.P('Select value for alarm', style={'color': '#666666'}),
-                        dcc.Dropdown(id='select_gas_smoke_value',
-                                     multi=False,
-                                     clearable=True,
-                                     disabled=False,
-                                     style={'display': True, 'margin-top': '-5px'},
-                                     value=210,
-                                     placeholder='Select Value',
-                                     options=gas_smoke_drop_down_list_values),
+                        dcc.Input(id='input_value_here1',
+                                  type='number',
+                                  value=250,
+                                  style={'margin-top': '-10px'}),
                     ], className='drop_down_list_column'),
                 ], className='alarm_button_column')
             ], className='sound_image_row'),
@@ -211,7 +207,7 @@ def update_value(n_intervals, button, input_value_here):
 @app.callback(Output('sound_image', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('alarm_button', 'on')],
-              [State('input_value_here', 'value')],
+              [State('input_value_here', 'value')]
               )
 def update_value(n_intervals, button, input_value_here):
     temp_value = db.child('DHT').get('temperature')
@@ -231,7 +227,7 @@ def update_value(n_intervals, button, input_value_here):
 @app.callback(Output('black_sound_image', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('alarm_button', 'on')],
-              [State('input_value_here', 'value')],
+              [State('input_value_here', 'value')]
               )
 def update_value(n_intervals, button, input_value_here):
     temp_value = db.child('DHT').get('temperature')
@@ -280,13 +276,13 @@ def update_value(n_intervals):
 @app.callback(Output('gas_alarm', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('gas_alarm_button', 'on')],
-              [Input('select_gas_smoke_value', 'value')])
-def update_value(n_intervals, button, select_gas_smoke_value):
+              [State('input_value_here1', 'value')])
+def update_value(n_intervals, button, input_value_here1):
     gas_value = db.child('MQ135').get('gas')
     for item in gas_value.each():
         gas = item.val()
 
-    if gas >= select_gas_smoke_value and button == True:
+    if gas >= input_value_here1 and button == True:
         return [
             html.Audio(src=app.get_asset_url('alarm.mp3'),
                        autoPlay='AUTOPLAY',
@@ -295,51 +291,51 @@ def update_value(n_intervals, button, select_gas_smoke_value):
                        preload='yes',
                        style={'display': 'None'})
         ]
-    elif gas >= select_gas_smoke_value and button == False:
+    elif gas >= input_value_here1 and button == False:
         return None
-    elif gas < select_gas_smoke_value:
+    elif gas < input_value_here1:
         return None
 
 
 @app.callback(Output('gas_sound_image', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('gas_alarm_button', 'on')],
-              [Input('select_gas_smoke_value', 'value')])
-def update_value(n_intervals, button, select_gas_smoke_value):
+              [State('input_value_here1', 'value')])
+def update_value(n_intervals, button, input_value_here1):
     gas_value = db.child('MQ135').get('gas')
     for item in gas_value.each():
         gas = item.val()
 
-    if gas >= select_gas_smoke_value and button == True:
+    if gas >= input_value_here1 and button == True:
         return [
             html.Img(src=app.get_asset_url('alarm.png'))
         ]
-    elif gas >= select_gas_smoke_value and button == False:
+    elif gas >= input_value_here1 and button == False:
         return None
-    elif gas < select_gas_smoke_value:
+    elif gas < input_value_here1:
         return None
 
 
 @app.callback(Output('gas_black_sound_image', 'children'),
               [Input('blink_image', 'n_intervals')],
               [Input('gas_alarm_button', 'on')],
-              [Input('select_gas_smoke_value', 'value')])
-def update_value(n_intervals, button, select_gas_smoke_value):
+              [State('input_value_here1', 'value')])
+def update_value(n_intervals, button, input_value_here1):
     gas_value = db.child('MQ135').get('gas')
     for item in gas_value.each():
         gas = item.val()
 
-    if gas >= select_gas_smoke_value and button == True:
+    if gas >= input_value_here1 and button == True:
         return None
-    elif gas >= select_gas_smoke_value and button == False:
+    elif gas >= input_value_here1 and button == False:
         return [
             html.Img(src=app.get_asset_url('bell.png'))
         ]
-    elif gas < select_gas_smoke_value and button == False:
+    elif gas < input_value_here1 and button == False:
         return [
             html.Img(src=app.get_asset_url('bell.png'))
         ]
-    elif gas < select_gas_smoke_value and button == True:
+    elif gas < input_value_here1 and button == True:
         return [
             html.Img(src=app.get_asset_url('bell.png'))
         ]
