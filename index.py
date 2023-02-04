@@ -52,7 +52,7 @@ app.layout = html.Div([
                                   type='number',
                                   value=22,
                                   style={'margin-top': '-10px'}),
-                    ], className='drop_down_list_column')
+                    ], className='input_column')
                 ], className='alarm_button_column')
             ], className='sound_image_row'),
 
@@ -79,12 +79,12 @@ app.layout = html.Div([
                                   type='number',
                                   value=250,
                                   style={'margin-top': '-10px'}),
-                    ], className='drop_down_list_column'),
+                    ], className='input_column'),
                 ], className='alarm_button_column')
             ], className='sound_image_row'),
 
             html.Div(id='gas_alarm'),
-        ], className='temp_container twelve columns')
+        ], className='temp_container1 twelve columns')
     ], className='row'),
 
 ])
