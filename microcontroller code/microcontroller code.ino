@@ -11,20 +11,20 @@ DHT dht(DHTPIN, DHTTYPE);
 #endif
 #include <Firebase_ESP_Client.h>
 
-#include<ESP8266WebServer.h>
-#include<WiFiManager.h>
-#include<DNSServer.h>
-
 //Provide the token generation process info.
 #include "addons/TokenHelper.h"
 //Provide the RTDB payload printing info and other helper functions.
 #include "addons/RTDBHelper.h"
 
+// Insert your network credentials
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
+
 // Insert Firebase project API Key
-#define API_KEY "AIzaSyCPzA7m7sAGLkVdfv3Sn5JpvQPaenbzukk"
+#define API_KEY ""
 
 // Insert RTDB URLefine the RTDB URL */
-#define DATABASE_URL "home-gas-leakage-default-rtdb.firebaseio.com"
+#define DATABASE_URL ""
 
 //Define Firebase Data object
 FirebaseData fbdo;
@@ -40,11 +40,18 @@ int airQuality = A0;
 void setup() {
   Serial.begin(9600);
   dht.begin();
-  
-  WiFiManager wifiManager;
-  Serial.println("Connecting.....");  
-  wifiManager.autoConnect("gas leakage","");
-  Serial.println("Connected");
+  pinMode(DHTPIN, INPUT);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(3000);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
 
   /* Assign the api key (required) */
   config.api_key = API_KEY;
